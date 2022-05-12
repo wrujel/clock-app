@@ -4,5 +4,5 @@ metadata:
   name: managed-cert
 spec:
   domains:
-    - clock-app-api.click 
-    - www.clock-app-api.click 
+    - clock-app-api.click
+    - www.clock-app-api.click
