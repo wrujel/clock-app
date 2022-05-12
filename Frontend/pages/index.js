@@ -33,10 +33,14 @@ export default function Home(props) {
     setTime(new Date());
     setHours(getHours(new Date()));
     getIp().then((res) => {
-      getServerData(res).then(() => {
-        refreshHour();
-        setLoading(false);
-      });
+      if (res) {
+        getServerData(res).then(() => {
+          refreshHour();
+          setLoading(false);
+        });
+      } else {
+        alert("Por favor deshabilite su adblock");
+      }
     });
   }, []);
 
