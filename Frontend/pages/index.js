@@ -33,7 +33,6 @@ export default function Home(props) {
   useEffect(() => {
     setTime(new Date());
     setHours(getHours(new Date()));
-    console.log(serverUrl, serverPort, apiUrl);
     getIp().then((res) => {
       getServerData(res).then(() => {
         refreshHour();
