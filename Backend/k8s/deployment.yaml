@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: clock-app-server
+spec:
+  selector:
+    matchLabels:
+      app: clock-app-server
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: clock-app-server
+    spec:
+      containers:
+        - name: clock-app-server
+          image: wrujel/clock-app-server
+          env:
+          - name: PORT
+            value: "4000"
+          - name: TIME_API_URL
+            value: "https://worldtimeapi.org/api/ip"
+          - name: GEO_API_URL
+            value: "https://api.geoapify.com/v1/ipinfo?"
+          - name: GEO_API_KEY
+            value: 3e82fb5e994b4130b2d1686ebc050e65
+          - name: QUOTE_API_URL
+            value: "https://api.quotable.io/random"
+          ports:
+            - containerPort: 4000
