@@ -9,7 +9,6 @@ import IconMoon from "../public/assets/desktop/icon-moon.svg";
 import IconSun from "../public/assets/desktop/icon-sun.svg";
 
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-const serverPort = process.env.NEXT_PUBLIC_SERVER_PORT;
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Home(props) {
@@ -63,7 +62,7 @@ export default function Home(props) {
 
   async function getServerData(res) {
     if (res) {
-      await fetch(`${serverUrl}:${serverPort}/api`, {
+      await fetch(`${serverUrl}/api`, {
         method: "POST",
         body: JSON.stringify({ ip: res }),
         headers: { "Content-Type": "application/json" },
@@ -90,7 +89,7 @@ export default function Home(props) {
   }
 
   async function getQuote() {
-    return await fetch(`${serverUrl}:${serverPort}/quote`)
+    return await fetch(`${serverUrl}/quote`)
       .then((res) => {
         return res.json();
       })
