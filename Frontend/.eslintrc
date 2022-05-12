@@ -1,3 +1,13 @@
 {
-  "parser": "@babel/eslint-parser"
+  "parser": "@babel/eslint-parser",
+  "plugins": ["prettier", "@typescript-eslint"],
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "requireConfigFile": false,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "impliedStrict": true,
+      "classes": true
+    }
+  }
 }
