@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mc-service
+  name: clock-app-server-service
+  namespace: default
 spec:
   selector:
-    app: mc-service
+    app: clock-app-server
   type: NodePort
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 4000
+      targetPort: 8080

@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: managed-cert-ingress
+  name: clock-app-server-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: clock-app-server
     networking.gke.io/managed-certificates: managed-cert
@@ -9,6 +9,6 @@ metadata:
 spec:
   defaultBackend:
     service:
-      name: mc-service
+      name: clock-app-server-service
       port:
         number: 80
