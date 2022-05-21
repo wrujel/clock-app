@@ -968,6 +968,12 @@
 }
 
 @media (max-width: 374px) {
+  .section-container {
+    min-width: 374px !important;
+  }
+  .background-img {
+    min-width: 374px !important;
+  }
   .hour-spec {
     display: none;
   }
