@@ -12,7 +12,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--black);
+  background-color: var(--white);
   color: var(--white);
   font-family: Inter;
   font-weight: 400;
@@ -21,7 +21,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 374px;
+  min-width: fit-content;
+  min-height: fit-content;
   overflow-x: visible;
 }
 

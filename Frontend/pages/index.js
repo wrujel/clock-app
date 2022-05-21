@@ -11,7 +11,7 @@ import IconSun from "../public/assets/desktop/icon-sun.svg";
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function Home(props) {
+export default function Home() {
   const [text, setText] = useState();
   const [autor, setAutor] = useState();
   const [greet, setGreet] = useState();
@@ -229,7 +229,7 @@ export default function Home(props) {
                   onClick={handleButton}
                 >
                   <h5 className={styles["btn-text"]}>{button}</h5>
-                  <span className={styles["btn-icon"]} data-visible={!info}>
+                  <button className={styles["btn-icon"]} data-visible={!info}>
                     {info ? (
                       <img
                         src={IconArrowUp}
@@ -243,7 +243,7 @@ export default function Home(props) {
                         data-visible={!info}
                       />
                     )}
-                  </span>
+                  </button>
                 </button>
               </div>
             </div>
