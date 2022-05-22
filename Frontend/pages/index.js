@@ -284,6 +284,7 @@ export default function Home() {
           )}
         </main>
       )}
+      <footer className="position: fixed; bottom: 0; width: 100%"></footer>
     </div>
   );
 }
