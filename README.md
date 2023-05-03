@@ -57,6 +57,12 @@
       alt="Date-fns version" 
     />
   </a>
+  <a href="https://react-hot-toast.com/">
+    <img 
+      src="https://img.shields.io/badge/React--hot--toast-1.0.0+-blue.svg?style=flat&logo=react-hot-toast" 
+      alt="React-hot-toast version" 
+    />
+  </a>
 </div>
 <br/>
 
@@ -69,7 +75,7 @@
 - [x] [Normalize.css](https://necolas.github.io/normalize.css/)
 - [x] [Date-fns](https://date-fns.org/)    
 - [x] [Vercel](https://vercel.com/)
-
+- [x] [React-hot-toast](https://react-hot-toast.com/)
 
 ## Getting Started
 
