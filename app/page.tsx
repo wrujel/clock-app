@@ -47,8 +47,6 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
-      console.log(data);
-
       setZone(`UTC${data.abbreviation}`);
       setTimezone(data.timezone);
       setDayofWeek(data.day_of_week);
