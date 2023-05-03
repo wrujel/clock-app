@@ -9,6 +9,7 @@ import IconMoon from "./components/IconSun";
 import IconRefresh from "./components/IconRefresh";
 import IconArrowDown from "./components/IconArrowDown";
 import IconArrowUp from "./components/IconArrowUp";
+import toast, { Toaster } from "react-hot-toast";
 
 const serverUrl = "/api";
 const apiUrl = "https://api.ipify.org/?format=json";
@@ -31,7 +32,12 @@ export default function Home() {
   const [country, setCountry] = useState();
 
   useEffect(() => {
-    getServerData();
+    toast.promise(getServerData(), {
+      loading: "Loading...",
+      success: "Loaded",
+      error: "Error loading client",
+    });
+    // getServerData();
     const timerId = setInterval(refreshTime, 1000);
     return function cleanup() {
       clearInterval(timerId);
@@ -41,24 +47,35 @@ export default function Home() {
   async function getServerData() {
     const ip = await getIp();
     if (ip) {
-      const res = await fetch(`${serverUrl}/data`, {
-        method: "POST",
-        body: JSON.stringify({ ip: ip }),
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      setZone(`UTC${data.abbreviation}`);
-      setTimezone(data.timezone);
-      setDayofWeek(data.day_of_week);
-      setDayofYear(data.day_of_year);
-      setWeek(data.week_number);
-      setCity(data.city_name);
-      setCountry(data.country_name);
-      setText(data.content);
-      setAutor(data.author);
-      setLoading(false);
+      try {
+        const res = await fetch(`${serverUrl}/data`, {
+          method: "POST",
+          body: JSON.stringify({ ip: ip }),
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+
+        if (res.status !== 200) {
+          toast.error("Error fetching data");
+          setLoading(false);
+          return;
+        }
+
+        setZone(data.abbreviation);
+        setTimezone(data.timezone);
+        setDayofWeek(data.day_of_week);
+        setDayofYear(data.day_of_year);
+        setWeek(data.week_number);
+        setCity(data.city_name);
+        setCountry(data.country_name);
+        setText(data.content);
+        setAutor(data.author);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Error fetching data");
+      }
     } else {
-      alert("No se pudo establecer conexión con el servidor");
+      toast.error("Disable adblocker to load client");
     }
   }
 
@@ -103,11 +120,16 @@ export default function Home() {
   };
 
   const handleRefresh = () => {
-    getQuote();
+    toast.promise(getQuote(), {
+      loading: "Loading...",
+      success: "Quote Loaded",
+      error: "Error connecting to server",
+    });
   };
 
   return (
     <div className={styles["section-container"]}>
+      <Toaster position="top-right" reverseOrder={false} />
       <main className={styles["section-center"]} data-visible={!info}>
         {loading ? (
           <Loader />
@@ -134,7 +156,12 @@ export default function Home() {
                   <h5 className={styles["quote-author"]}>{autor}</h5>
                 </div>
               ) : (
-                ""
+                <div className={styles["quote-container"]} data-visible={!info}>
+                  <div className={styles["quote-line"]}>
+                    <div className={styles["quote-text"]}></div>
+                  </div>
+                  <h5 className={styles["quote-author"]}></h5>
+                </div>
               )}
               <div
                 className={styles["weather-time-container"]}
@@ -159,7 +186,7 @@ export default function Home() {
                         {format(time, "HH:mm")}
                       </h1>
                       {zone ? (
-                        <div className={styles["hour-spec"]}>{zone}</div>
+                        <div className={styles["hour-spec"]}>UTC{zone}</div>
                       ) : (
                         ""
                       )}
