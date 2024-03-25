@@ -1,70 +1,49 @@
+<div align='center'>
+
+  [![Deploy][deploy-active]](/) 
+  [![Tests][tests-passed]](/) 
+  [![Buy me a coffee][buy-me-a-coffee]][buy-me-a-coffee-link]
+
+</div>
+
+<div align='center'>
+  <a href='/'>
+    <img
+      src='/public/screenshot.png'
+      alt='Screenshot of the app'
+    />
+  </a>
+</div>
+
 <div align="center">
   <h1>Clock App</h1>
 </div>
 
 <div align="center">
-  <a href="/README.md">
-    <img 
-      src="https://img.shields.io/badge/Status-Complete-success.svg" 
-      alt="Status" 
-    />
-  </a>
-  <a href="/package.json">
-    <img 
-      src="https://img.shields.io/badge/Version-2.0.0-blue.svg" 
-      alt="Version" 
-    />
-  </a>
-  <a href="/LICENSE">
-    <img 
-      src="https://img.shields.io/badge/License-MIT-green.svg" 
-      alt="License" 
-    />
-  </a>
-  <a href="https://vercel.com/">
-    <img
-      src="https://img.shields.io/badge/vercel-Deployed-success.svg?style=flat&logo=vercel"
-      alt="Deployed on Vercel"
-    />
-  </a>
-  <a href="https://nextjs.org/">
-    <img 
-      src="https://img.shields.io/badge/Next.js-13.0.0+-blue.svg?style=flat&logo=next.js" 
-      alt="Next.js version" 
-    />
-  </a>
-  <a href="https://reactjs.org/">
-    <img 
-      src="https://img.shields.io/badge/React-18.0.0+-blue.svg?style=flat&logo=react" 
-      alt="React version" 
-    />
-  </a>
-  <a href="https://www.typescriptlang.org/">
-    <img 
-      src="https://img.shields.io/badge/TypeScript-5.0.0+-blue.svg?style=flat&logo=typescript" 
-      alt="TypeScript version" 
-    />
-  </a>
-  <a href="https://tailwindcss.com/">
-    <img 
-      src="https://img.shields.io/badge/Tailwind%20CSS-3.0.0+-blue.svg?style=flat&logo=tailwind-css" 
-      alt="Tailwind CSS version" 
-    />
-  </a>
-  <a href="https://date-fns.org/">
-    <img 
-      src="https://img.shields.io/badge/Date--fns-2.0.0+-blue.svg?style=flat&logo=date-fns" 
-      alt="Date-fns version" 
-    />
-  </a>
-  <a href="https://react-hot-toast.com/">
-    <img 
-      src="https://img.shields.io/badge/React--hot--toast-1.0.0+-blue.svg?style=flat&logo=react-hot-toast" 
-      alt="React-hot-toast version" 
-    />
-  </a>
+  
+  [![Next.js][nextjs]][nextjs-link]
+  [![TypeScript][typescript]][typescript-link]
+  [![Tailwind CSS][tailwindcss]][tailwindcss-link]
+  [![React][react]][react-link]
+  [![Date-fns][date-fns]][date-fns-link]
+  [![React-hot-toast][react-hot-toast]][react-hot-toast-link]
+  [![Vercel][vercel]][vercel-link]
+
 </div>
-<br/>
+
+<div align='center'>
+  This is a simple clock app built with Next.js, React, TypeScript, and Tailwind CSS. It displays the current time and date in a beautiful UI.
+
+  [Demo](https://clock-app-wrujel.vercel.app/) · [Report issue](/issues) · [Suggest something](/issues)
+</div>
+
+## Table of Contents
+- [Table of Contents](#table-of-contents)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Learn More](#learn-more)
+- [Deploy on Vercel](#deploy-on-vercel)
+- [Demo](#demo)
 
 ## Tech Stack
 
@@ -117,3 +96,75 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Demo
 
 You can check out the demo [here](https://clock-app-wrujel.vercel.app/).
+
+
+
+<!-- Badges -->
+[deploy-active]: https://img.shields.io/badge/Deploy-Active-success?style=for-the-badge&logoColor=white
+[tests-passed]: https://img.shields.io/badge/Test-Passed-success?style=for-the-badge&color=green
+[buy-me-a-coffee]: https://img.shields.io/badge/Buy%20me%20a%20coffee-FF813F?style=for-the-badge&logo=buy-me-a-coffee
+[nextjs]: https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js
+[typescript]: https://img.shields.io/badge/Typescript-007ACC?style=for-the-badge&logo=typescript&logoColor=white&color=blue
+[tailwindcss]: https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
+[react]: https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white
+[lodash]: https://img.shields.io/badge/Lodash-gray?style=for-the-badge&logo=lodash
+[next-auth]: https://img.shields.io/badge/Next--Auth-black?style=for-the-badge&logo=next.js
+[prisma]: https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white
+[axios]: https://img.shields.io/badge/Axios-56A7F7?style=for-the-badge&logo=axios&logoColor=white
+[react-icons]: https://img.shields.io/badge/React--Icons-61DAFB?style=for-the-badge&logo=react&logoColor=white
+[swr]: https://img.shields.io/badge/SWR-black?style=for-the-badge&logo=next.js
+[zustand]: https://img.shields.io/badge/Zustand-gray?style=for-the-badge&logo=npm
+[react-player]: https://img.shields.io/badge/React--Player-gray?style=for-the-badge&logo=npm
+[mongodb]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white
+[vercel]: https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white
+[html]: https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
+[css]: https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white
+[javascript]: https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E
+[netlify]: https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white
+[vite]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[astro]: https://img.shields.io/badge/Astro-0C1222?style=for-the-badge&logo=astro&logoColor=FDFDFE
+[express]: https://img.shields.io/badge/Express%20js-000000?style=for-the-badge&logo=express&logoColor=white
+[mongoose]: https://img.shields.io/badge/Mongoose-gray?style=for-the-badge&logo=mongoose&logoColor=white
+[angular]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[angular-material]: https://img.shields.io/badge/Angular%20Material-607D8B?style=for-the-badge&logo=angular&logoColor=white
+[nodejs]: https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white
+[netsjs]: https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white
+[swagger]: https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white
+[jest]: https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white
+[react-hot-toast]: https://img.shields.io/badge/React--Hot--Toast-gray?style=for-the-badge&logo=react-hot-toast&logoColor=white
+[github-api]: https://img.shields.io/badge/Github%20API-181717?style=for-the-badge&logo=github&logoColor=white
+[date-fns]: https://img.shields.io/badge/Date--fns-F7841B?style=for-the-badge&logo=date-fns&logoColor=white
+
+<!-- Badges links -->
+[buy-me-a-coffee-link]: https://www.buymeacoffee.com/wrujel
+[nextjs-link]: https://nextjs.org/
+[typescript-link]: https://www.typescriptlang.org/
+[tailwindcss-link]: https://tailwindcss.com/
+[react-link]: https://reactjs.org/
+[lodash-link]: https://lodash.com/
+[next-auth-link]: https://next-auth.js.org/
+[prisma-link]: https://www.prisma.io/
+[axios-link]: https://axios-http.com/
+[react-icons-link]: https://react-icons.github.io/react-icons/
+[swr-link]: https://swr.vercel.app/
+[zustand-link]: https://zustand.surge.sh/
+[react-player-link]: https://www.npmjs.com/package/react-player
+[mongodb-link]: https://www.mongodb.com/
+[vercel-link]: https://vercel.com/
+[html-link]: https://developer.mozilla.org/en-US/docs/Web/HTML
+[css-link]: https://developer.mozilla.org/en-US/docs/Web/CSS
+[javascript-link]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+[netlify-link]: https://www.netlify.com/
+[vite-link]: https://vitejs.dev/
+[astro-link]: https://astro.build/
+[express-link]: https://expressjs.com/
+[mongoose-link]: https://mongoosejs.com/
+[angular-link]: https://angular.io/
+[angular-material-link]: https://material.angular.io/
+[nodejs-link]: https://nodejs.org/en/
+[netsjs-link]: https://nestjs.com/
+[swagger-link]: https://swagger.io/
+[jest-link]: https://jestjs.io/
+[react-hot-toast-link]: https://react-hot-toast.com/
+[github-api-link]: https://docs.github.com/en/rest
+[date-fns-link]: https://date-fns.org/
