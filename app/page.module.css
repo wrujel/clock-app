@@ -878,7 +878,7 @@
 @media (max-width: 375px) {
   .section-center {
     width: 375px;
-    max-height: 667px;
+    max-height: 100svh;
   }
 
   .section-center[data-visible="false"] {
@@ -889,7 +889,8 @@
   .background-img {
     background: url("../public/assets/mobile/bg-image-daytime.jpg");
     max-width: 375px;
-    max-height: 667px;
+    max-height: 100svh;
+    background-size: cover;
   }
 
   .background-img[day-info="false"] {
@@ -966,17 +967,7 @@
   .more-information {
     gap: 7%;
   }
-}
 
-@media (max-width: 374px) {
-  .section-container {
-    min-width: 374px !important;
-    min-height: 667px !important;
-  }
-  .background-img {
-    min-width: 374px !important;
-    min-height: 667px !important;
-  }
   .hour-spec {
     display: none;
   }
