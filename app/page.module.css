@@ -847,6 +847,15 @@
 }
 
 @media (max-width: 415px) {
+  .section-center {
+    max-height: 100svh;
+  }
+
+  .background-img {
+    max-height: 100svh;
+    background-size: cover;
+  }
+
   .hour-text {
     margin-right: 0px;
     font-size: 95px;
@@ -878,7 +887,6 @@
 @media (max-width: 375px) {
   .section-center {
     width: 375px;
-    max-height: 100svh;
   }
 
   .section-center[data-visible="false"] {
@@ -889,8 +897,6 @@
   .background-img {
     background: url("../public/assets/mobile/bg-image-daytime.jpg");
     max-width: 375px;
-    max-height: 100svh;
-    background-size: cover;
   }
 
   .background-img[day-info="false"] {
