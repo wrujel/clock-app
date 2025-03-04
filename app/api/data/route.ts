@@ -8,8 +8,8 @@ export async function POST(request: Request) {
   const geo_api = await fetch("https://freegeoip.app/json/" + ip);
   const geo_data = await geo_api.json();
 
-  const quote_api = await fetch("https://api.quotable.io/random");
-  const quote_data = await quote_api.json();
+  //const quote_api = await fetch("https://api.quotable.io/random");
+  //const quote_data = await quote_api.json();
 
   const bodyResponse = {
     //abbreviation: time_data.abbreviation,
@@ -19,8 +19,8 @@ export async function POST(request: Request) {
     //week_number: time_data.week_number,
     city_name: geo_data.city,
     country_name: geo_data.country_name,
-    content: quote_data.content,
-    author: quote_data.author,
+    //content: quote_data.content,
+    //author: quote_data.author,
   };
 
   return new Response(JSON.stringify(bodyResponse), { status: 200 });
