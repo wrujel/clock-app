@@ -1,9 +1,14 @@
+import { NextRequest, NextResponse } from "next/server";
 import { quotes } from "./quotes-data";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const quote = generateQuote();
-  const response = { content: quote.quote, author: quote.author };
-  return new Response(JSON.stringify(response), { status: 200 });
+  const body = { content: quote.quote, author: quote.author };
+  const status = 200;
+  const headers = {
+    "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+  };
+  return NextResponse.json(body, { status, headers });
 }
 
 export const generateQuote = () => {
