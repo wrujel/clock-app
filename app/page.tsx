@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { format, getHours } from "date-fns";
-import styles from "./page.module.css";
-import Loader from "./components/Loader";
-import IconSun from "./components/IconSun";
-import IconMoon from "./components/IconSun";
-import IconRefresh from "./components/IconRefresh";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import IconArrowDown from "./components/IconArrowDown";
 import IconArrowUp from "./components/IconArrowUp";
-import toast, { Toaster } from "react-hot-toast";
+import IconRefresh from "./components/IconRefresh";
+import { default as IconMoon, default as IconSun } from "./components/IconSun";
+import Loader from "./components/Loader";
+import styles from "./page.module.css";
 
 const serverUrl = "/api";
 const apiUrl = "https://api.ipify.org/?format=json";
@@ -21,10 +20,10 @@ export default function Home() {
   const [time, setTime] = useState(new Date());
   const [zone, setZone] = useState("");
   const [button, setButton] = useState("MORE");
-  const [timezone, setTimezone] = useState();
-  const [dayofWeek, setDayofWeek] = useState();
-  const [dayofYear, setDayofYear] = useState();
-  const [week, setWeek] = useState();
+  const [timezone, setTimezone] = useState<string | undefined>(undefined);
+  const [dayofWeek, setDayofWeek] = useState<string | undefined>(undefined);
+  const [dayofYear, setDayofYear] = useState<string | undefined>(undefined);
+  const [week, setWeek] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState(false);
   const [isDay, setIsDay] = useState(true);
@@ -61,11 +60,23 @@ export default function Home() {
           return;
         }
 
-        setZone(data.abbreviation);
-        setTimezone(data.timezone);
-        setDayofWeek(data.day_of_week);
-        setDayofYear(data.day_of_year);
-        setWeek(data.week_number);
+        const zone = new Date().getTimezoneOffset() / 60;
+        setZone(zone > 0 ? "-" + zone.toString() : "+" + zone.toString());
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        setTimezone(timeZone.toString());
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        const dayOfYear = Math.floor(
+          (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) /
+            1000 /
+            60 /
+            60 /
+            24
+        );
+        const weekNumber = Math.floor(dayOfYear / 7);
+        setDayofWeek(dayOfWeek.toString());
+        setDayofYear(dayOfYear.toString());
+        setWeek(weekNumber.toString());
         setCity(data.city_name);
         setCountry(data.country_name);
         setText(data.content);
