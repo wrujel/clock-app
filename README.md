@@ -35,7 +35,7 @@
 <div align='center'>
   A real-time clock application built with Next.js 13 and TypeScript that displays the current time, greeting based on time of day, user location via IP geolocation, and random inspirational quotes.
 
-  [Demo]({{DEMO_URL}}) · [Report issue](/issues) · [Suggest something](/issues)
+  [Demo][demo-link] · [Report issue](/issues) · [Suggest something](/issues)
 </div>
 
 ## Table of Contents
