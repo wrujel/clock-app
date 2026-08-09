@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./SkyBackground.module.css";
 
 type RGB = [number, number, number];
@@ -49,16 +49,31 @@ function skyAt(h: number) {
   };
 }
 
-function orbAt(h: number): { kind: "sun" | "moon"; x: number; y: number } {
-  // Arc biased to the center-right band so the orb never collides with the
-  // quote (top-left) or the clock (bottom-left).
-  const arc = (p: number) => ({
-    x: 30 + p * 50,
-    y: 76 - Math.sin(p * Math.PI) * 60,
+interface Arc {
+  x0: number;
+  x1: number;
+  yBase: number;
+  yAmp: number;
+}
+
+// Arc bands per screen size: desktop keeps the orb in the center-right band
+// (clear of quote top-left and clock bottom-left); smaller screens center it
+// and lift it higher so it never collides with the stacked content.
+const arcFor = (width: number): Arc =>
+  width < 640
+    ? { x0: 18, x1: 82, yBase: 62, yAmp: 42 }
+    : width < 1024
+    ? { x0: 22, x1: 78, yBase: 72, yAmp: 55 }
+    : { x0: 30, x1: 80, yBase: 76, yAmp: 60 };
+
+function orbAt(h: number, arc: Arc): { kind: "sun" | "moon"; x: number; y: number } {
+  const pos = (p: number) => ({
+    x: arc.x0 + p * (arc.x1 - arc.x0),
+    y: arc.yBase - Math.sin(p * Math.PI) * arc.yAmp,
   });
-  if (h >= 6 && h < 18) return { kind: "sun", ...arc((h - 6) / 12) };
+  if (h >= 6 && h < 18) return { kind: "sun", ...pos((h - 6) / 12) };
   const hh = h < 6 ? h + 24 : h;
-  return { kind: "moon", ...arc((hh - 18) / 12) };
+  return { kind: "moon", ...pos((hh - 18) / 12) };
 }
 
 // Deterministic pseudo-random so server and client render identical stars.
@@ -72,9 +87,19 @@ interface Props {
 }
 
 export default function SkyBackground({ now }: Props) {
+  const [width, setWidth] = useState(() =>
+    typeof window === "undefined" ? 1440 : window.innerWidth
+  );
+
+  useEffect(() => {
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
   const sky = skyAt(h);
-  const orb = orbAt(h);
+  const orb = orbAt(h, arcFor(width));
 
   const stars = useMemo(
     () =>
