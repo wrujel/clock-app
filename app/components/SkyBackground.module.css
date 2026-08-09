@@ -1,0 +1,97 @@
+.sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.gradient {
+  position: absolute;
+  inset: -2%;
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  transition: opacity 2.5s ease;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation-name: twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.orb {
+  position: absolute;
+  width: clamp(90px, 12vw, 170px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: left 1.5s linear, top 1.5s linear;
+}
+
+.sun {
+  background: radial-gradient(
+    circle at 42% 38%,
+    #fffbe8,
+    #ffe9a3 42%,
+    #ffc759 68%,
+    rgba(255, 176, 66, 0) 78%
+  );
+  box-shadow: 0 0 90px 36px rgba(255, 205, 105, 0.35);
+}
+
+.moon {
+  background: radial-gradient(
+    circle at 38% 34%,
+    #fdfdf8,
+    #e8e6d9 58%,
+    #c9c6b4
+  );
+  box-shadow: 0 0 60px 22px rgba(220, 228, 255, 0.22);
+}
+
+.haze {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34%;
+  opacity: 0.55;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 90% at 50% 10%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.42)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star {
+    animation: none;
+  }
+
+  .orb {
+    transition: none;
+  }
+}

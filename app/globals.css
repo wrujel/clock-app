@@ -1,76 +1,39 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
 :root {
-  --black: #000;
-  --black-light: #303030;
-  --white: #fff;
-  --grey: #999999;
+  --ink: #f5f7ff;
+  --muted: rgba(245, 247, 255, 0.64);
+  --hairline: rgba(255, 255, 255, 0.16);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html,
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--white);
-  color: var(--white);
-  font-family: Inter;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: fit-content;
-  min-height: fit-content;
-  overflow-x: visible;
 }
 
-h1 {
-  font-family: Inter;
-  font-weight: 700;
-  font-size: 200px;
-  line-height: 200px;
-  letter-spacing: -5px;
+body {
+  background: #05070f;
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-h2 {
-  font-family: Inter;
-  font-weight: 700;
-  font-size: 56px;
-  line-height: 68px;
-}
-
-h3 {
-  font-family: Inter;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 28px;
-  letter-spacing: 4.8px;
-  text-transform: uppercase;
-}
-
-h4 {
-  font-family: Inter;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 28px;
-  letter-spacing: 4px;
-}
-
-h5 {
-  font-family: Inter;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 28px;
-}
-
-h6 {
-  font-family: Inter;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 28px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+  margin: 0;
 }
 
 a {
@@ -78,6 +41,21 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.85);
+  color: #0a0f24;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

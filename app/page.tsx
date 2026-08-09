@@ -1,92 +1,106 @@
 "use client";
 
-import { format, getHours } from "date-fns";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import CursorGlow from "./components/CursorGlow";
+import FlipClock from "./components/FlipClock";
 import IconArrowDown from "./components/IconArrowDown";
-import IconArrowUp from "./components/IconArrowUp";
-import IconRefresh from "./components/IconRefresh";
-import { default as IconMoon, default as IconSun } from "./components/IconSun";
+import IconMoon from "./components/IconMoon";
+import IconSun from "./components/IconSun";
 import Loader from "./components/Loader";
+import MagneticButton from "./components/MagneticButton";
+import Quote from "./components/Quote";
+import SkyBackground from "./components/SkyBackground";
+import StatsPanel from "./components/StatsPanel";
+import { useNow } from "./hooks/useNow";
 import styles from "./page.module.css";
 
 const serverUrl = "/api";
 const apiUrl = "https://api.ipify.org/?format=json";
 
+const container: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.16, delayChildren: 0.35 } },
+};
+
+const rise: Variants = {
+  hidden: { opacity: 0, y: 36 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 export default function Home() {
-  const [text, setText] = useState();
-  const [autor, setAutor] = useState();
-  const [greet, setGreet] = useState("");
-  const [time, setTime] = useState(new Date());
+  const [text, setText] = useState<string>();
+  const [autor, setAutor] = useState<string>();
   const [zone, setZone] = useState("");
-  const [button, setButton] = useState("MORE");
-  const [timezone, setTimezone] = useState<string | undefined>(undefined);
-  const [dayofWeek, setDayofWeek] = useState<string | undefined>(undefined);
-  const [dayofYear, setDayofYear] = useState<string | undefined>(undefined);
-  const [week, setWeek] = useState<string | undefined>(undefined);
+  const [timezone, setTimezone] = useState<string>();
+  const [dayofWeek, setDayofWeek] = useState<string>();
+  const [dayofYear, setDayofYear] = useState<string>();
+  const [week, setWeek] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState(false);
-  const [isDay, setIsDay] = useState(true);
-  const [city, setCity] = useState();
-  const [country, setCountry] = useState();
+  const [city, setCity] = useState<string>();
+  const [country, setCountry] = useState<string>();
+  const [mounted, setMounted] = useState(false);
+  const now = useNow();
 
   useEffect(() => {
+    setMounted(true);
     toast.promise(getServerData(), {
-      loading: "Loading...",
-      success: "Loaded",
+      loading: "Tuning the sky…",
+      success: "Sky synced",
       error: "Error loading client",
     });
-    // getServerData();
-    const timerId = setInterval(refreshTime, 1000);
-    return function cleanup() {
-      clearInterval(timerId);
-    };
   }, []);
 
   async function getServerData() {
     const ip = await getIp();
-    if (ip) {
-      try {
-        const res = await fetch(`${serverUrl}/data`, {
-          method: "POST",
-          body: JSON.stringify({ ip: ip }),
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-
-        if (res.status !== 200) {
-          toast.error("Error fetching data");
-          setLoading(false);
-          return;
-        }
-
-        const zone = new Date().getTimezoneOffset() / 60;
-        setZone(zone > 0 ? "-" + zone.toString() : "+" + zone.toString());
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        setTimezone(timeZone.toString());
-        const today = new Date();
-        const dayOfWeek = today.getDay();
-        const dayOfYear = Math.floor(
-          (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) /
-            1000 /
-            60 /
-            60 /
-            24
-        );
-        const weekNumber = Math.floor(dayOfYear / 7);
-        setDayofWeek(dayOfWeek.toString());
-        setDayofYear(dayOfYear.toString());
-        setWeek(weekNumber.toString());
-        setCity(data.city_name);
-        setCountry(data.country_name);
-        setText(data.content);
-        setAutor(data.author);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error fetching data");
-      }
-    } else {
+    if (!ip) {
       toast.error("Disable adblocker to load client");
+      setLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`${serverUrl}/data`, {
+        method: "POST",
+        body: JSON.stringify({ ip: ip }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+
+      if (res.status !== 200) {
+        toast.error("Error fetching data");
+        return;
+      }
+
+      const zone = new Date().getTimezoneOffset() / 60;
+      setZone(zone > 0 ? "-" + zone.toString() : "+" + zone.toString());
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      setTimezone(timeZone.toString());
+      const today = new Date();
+      const dayOfYear = Math.floor(
+        (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) /
+          1000 /
+          60 /
+          60 /
+          24
+      );
+      const weekNumber = Math.floor(dayOfYear / 7);
+      setDayofWeek(today.toLocaleDateString("en-US", { weekday: "long" }));
+      setDayofYear(dayOfYear.toString());
+      setWeek(weekNumber.toString());
+      setCity(data.city_name);
+      setCountry(data.country_name);
+      setText(data.content);
+      setAutor(data.author);
+    } catch (error) {
+      toast.error("Error fetching data");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -105,184 +119,170 @@ export default function Home() {
     return data.ip;
   }
 
-  const refreshTime = () => {
-    const currentTime = new Date();
-    setTime(currentTime);
-    const hour = getHours(currentTime);
-    if (5 <= hour && hour < 12) setGreet("GOOD MORNING");
-    else if (12 <= hour && hour < 18) setGreet("GOOD AFTERNOON");
-    else if (18 <= hour && 0 <= hour) setGreet("GOOD EVENING");
-
-    if (5 <= hour && hour < 18) {
-      setIsDay(true);
-    } else if (18 <= hour && 0 <= hour) {
-      setIsDay(false);
-    }
-  };
-
-  const handleButton = () => {
-    if (button === "MORE") {
-      setButton("LESS");
-      setInfo(true);
-    } else {
-      setButton("MORE");
-      setInfo(false);
-    }
-  };
-
   const handleRefresh = () => {
     toast.promise(getQuote(), {
-      loading: "Loading...",
-      success: "Quote Loaded",
+      loading: "Loading…",
+      success: "Quote loaded",
       error: "Error connecting to server",
     });
   };
 
+  const hour = now.getHours();
+  const greet =
+    hour < 5
+      ? "GOOD EVENING"
+      : hour < 12
+      ? "GOOD MORNING"
+      : hour < 18
+      ? "GOOD AFTERNOON"
+      : "GOOD EVENING";
+  const isNight = hour < 5 || hour >= 18;
+  const statsReady = Boolean(timezone && dayofWeek && dayofYear && week);
+
   return (
-    <div className={styles["section-container"]}>
-      <Toaster position="top-right" reverseOrder={false} />
-      <main className={styles["section-center"]} data-visible={!info}>
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            {!isDay ? <div className={styles["line-img"]}></div> : ""}
-            <div
-              className={styles["background-img"]}
-              day-info={isDay ? "true" : "false"}
-            />
-            <div className={styles["section-top"]} data-visible={!info}>
-              {text && autor ? (
-                <div className={styles["quote-container"]} data-visible={!info}>
-                  <div className={styles["quote-line"]}>
-                    <div className={styles["quote-text"]}>{text}</div>
-                    <button
-                      type="button"
-                      className={styles["quote-button"]}
-                      onClick={handleRefresh}
+    <div className={styles.shell}>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "rgba(8, 11, 26, 0.72)",
+            color: "#f5f7ff",
+            border: "1px solid rgba(255, 255, 255, 0.14)",
+            backdropFilter: "blur(12px)",
+            fontFamily: "var(--font-body), sans-serif",
+            fontSize: "0.85rem",
+          },
+        }}
+      />
+
+      {mounted && <SkyBackground now={now} />}
+      {mounted && <CursorGlow />}
+
+      <AnimatePresence>{loading && <Loader key="loader" />}</AnimatePresence>
+
+      {!loading && (
+        <motion.main
+          className={styles.main}
+          data-info={info}
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.div className={styles.topRow} variants={rise}>
+            <Quote text={text} author={autor} onRefresh={handleRefresh} />
+          </motion.div>
+
+          <motion.div className={styles.bottomRow} variants={rise}>
+            <div className={styles.info}>
+              <h4 className={styles.greet}>
+                <motion.span
+                  className={styles.greetIcon}
+                  initial={{ scale: 0, rotate: -120 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{
+                    delay: 0.55,
+                    type: "spring",
+                    stiffness: 220,
+                    damping: 15,
+                  }}
+                >
+                  {isNight ? <IconMoon /> : <IconSun />}
+                </motion.span>
+                <span className={styles.greetMask} aria-label={greet}>
+                  {greet.split("").map((c, i) => (
+                    <motion.span
+                      key={i}
+                      className={styles.greetLetter}
+                      initial={{ y: "135%" }}
+                      animate={{ y: 0 }}
+                      transition={{
+                        delay: 0.6 + i * 0.028,
+                        duration: 0.7,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      aria-hidden
                     >
-                      <IconRefresh />
-                    </button>
-                  </div>
-                  <h5 className={styles["quote-author"]}>{autor}</h5>
-                </div>
-              ) : (
-                <div className={styles["quote-container"]} data-visible={!info}>
-                  <div className={styles["quote-line"]}>
-                    <div className={styles["quote-text"]}></div>
-                  </div>
-                  <h5 className={styles["quote-author"]}></h5>
-                </div>
+                      {c === " " ? "\u00A0" : c}
+                    </motion.span>
+                  ))}
+                </span>
+              </h4>
+
+              <FlipClock now={now} zone={zone} />
+
+              {city && country && (
+                <motion.h3
+                  className={styles.location}
+                  initial={{ opacity: 0, letterSpacing: "0.7em" }}
+                  animate={{ opacity: 1, letterSpacing: "0.3em" }}
+                  transition={{
+                    delay: 0.85,
+                    duration: 1.1,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  IN {city}, {country}
+                </motion.h3>
               )}
-              <div
-                className={styles["weather-time-container"]}
-                data-visible={!info}
-              >
-                <div className={styles["weather-time-container-info"]}>
-                  <div className={styles["day-box"]}>
-                    <div className={styles["icon-day-box"]}>
-                      {isDay ? <IconSun /> : <IconMoon />}
-                    </div>
-                    <h4 className={styles["greet-text"]}>
-                      {greet ? greet + ", " : ""}
-                      <span className={styles["greet-add"]}>
-                        IT&rsquo;S CURRENTLY
-                      </span>
-                    </h4>
-                  </div>
-
-                  {time ? (
-                    <div className={styles["hour-box"]}>
-                      <h1 className={styles["hour-text"]}>
-                        {format(time, "HH:mm")}
-                      </h1>
-                      {zone ? (
-                        <div className={styles["hour-spec"]}>UTC{zone}</div>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {city && country ? (
-                    <div className={styles["place-box"]}>
-                      <h3 className={styles["place-text"]}>
-                        IN {city}, {country}
-                      </h3>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                {timezone && dayofWeek && dayofYear && week ? (
-                  <div className={styles["btn-box"]}>
-                    <button
-                      type="button"
-                      className={styles["btn"]}
-                      onClick={handleButton}
-                    >
-                      <h5 className={styles["btn-text"]}>{button}</h5>
-                      <div className={styles["btn-icon"]} data-visible={!info}>
-                        {info ? (
-                          <IconArrowUp info={info} />
-                        ) : (
-                          <IconArrowDown info={info} />
-                        )}
-                      </div>
-                    </button>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
             </div>
-            {info ? (
-              <div
-                className={styles["section-bottom"]}
-                data-visible={!info}
-                day-info={isDay ? "true" : "false"}
+          </motion.div>
+        </motion.main>
+      )}
+
+      {/* Floating toggle — lives outside the shifted main so it stays
+          reachable when the stats panel is open. */}
+      {!loading && statsReady && (
+        <motion.div
+          className={styles.toggleSlot}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <MagneticButton>
+            <motion.button
+              type="button"
+              className={styles.toggle}
+              onClick={() => setInfo((v) => !v)}
+              aria-expanded={info}
+              whileTap={{ scale: 0.94 }}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={info ? "less" : "more"}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {info ? "LESS" : "MORE"}
+                </motion.span>
+              </AnimatePresence>
+              <motion.span
+                className={styles.toggleIcon}
+                animate={{ rotate: info ? 180 : 0 }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
               >
-                <div className={styles["more-information"]}>
-                  <div
-                    className={`${styles["more-information-cell"]} ${styles["cell1"]}`}
-                  >
-                    <h6 className={styles["label-top"]}>Current timezone</h6>
-                    <h2 className={styles["value-top"]}>{timezone}</h2>
-                  </div>
-                  <div
-                    className={`${styles["more-information-cell"]} ${styles["cell2"]}`}
-                  >
-                    <h6 className={styles["label-bottom"]}>Day of the year</h6>
-                    <h2 className={styles["value-bottom"]}>{dayofYear}</h2>
-                  </div>
+                <IconArrowDown />
+              </motion.span>
+            </motion.button>
+          </MagneticButton>
+        </motion.div>
+      )}
 
-                  <div
-                    className={styles["line"]}
-                    day-info={isDay ? "true" : "false"}
-                  ></div>
+      {statsReady && (
+        <StatsPanel
+          open={info}
+          isNight={isNight}
+          stats={[
+            { label: "Current timezone", value: timezone ?? "", numeric: false },
+            { label: "Day of the year", value: dayofYear ?? "", numeric: true },
+            { label: "Day of the week", value: dayofWeek ?? "", numeric: false },
+            { label: "Week number", value: week ?? "", numeric: true },
+          ]}
+        />
+      )}
 
-                  <div
-                    className={`${styles["more-information-cell"]} ${styles["cell3"]}`}
-                  >
-                    <h6 className={styles["label-top"]}>Day of the week</h6>
-                    <h2 className={styles["value-top"]}>{dayofWeek}</h2>
-                  </div>
-                  <div
-                    className={`${styles["more-information-cell"]} ${styles["cell4"]}`}
-                  >
-                    <h6 className={styles["label-bottom"]}>Week number</h6>
-                    <h2 className={styles["value-bottom"]}>{week}</h2>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
-          </>
-        )}
-      </main>
+      <div className={styles.grain} aria-hidden />
     </div>
   );
 }
