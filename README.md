@@ -1,9 +1,9 @@
 <div align='center'>
 
-  [![demo][demo]][demo-link]
-  [![status][status]][status-link]
-  [![deploy][deploy]](/)
-  [![test][tests]][tests-link]
+[![demo][demo]][demo-link]
+[![status][status]][status-link]
+[![deploy][deploy]](/)
+[![test][tests]][tests-link]
 
 </div>
 
@@ -23,19 +23,20 @@
 
 <div align='center'>
 
-  [![Next.js][nextjs]][nextjs-link]
-  [![TypeScript][typescript]][typescript-link]
-  [![React][react]][react-link]
-  [![date-fns][date-fns]][date-fns-link]
-  [![React Hot Toast][react-hot-toast]][react-hot-toast-link]
-  [![Vercel][vercel]][vercel-link]
+[![Next.js][nextjs]][nextjs-link]
+[![TypeScript][typescript]][typescript-link]
+[![React][react]][react-link]
+[![Framer Motion][framer-motion]][framer-motion-link]
+[![React Hot Toast][react-hot-toast]][react-hot-toast-link]
+[![Vercel][vercel]][vercel-link]
 
 </div>
 
 <div align='center'>
-  A real-time clock application built with Next.js 13 and TypeScript that displays the current time, greeting based on time of day, user location via IP geolocation, and random inspirational quotes.
+  Circadia — a living clock built with Next.js 13 and TypeScript. A procedural sky repaints itself across the 24-hour cycle, split-flap digits tick out the local time, and an expandable panel adds timezone, day-of-year and week details alongside IP-based location and a rotating quote.
 
-  [Demo][demo-link] · [Report issue](/issues) · [Suggest something](/issues)
+[Demo][demo-link] · [Report issue](/issues) · [Suggest something](/issues)
+
 </div>
 
 ## Table of Contents
@@ -48,6 +49,7 @@
   - [Installation](#installation)
   - [Running locally](#running-locally)
   - [Build](#build)
+- [Environment Variables](#environment-variables)
 - [Project Structure](#project-structure)
 - [Demo](#demo)
 - [API Reference](#api-reference)
@@ -56,25 +58,29 @@
 
 ## Features
 
-- [x] Real-time clock updating every second
-- [x] Dynamic greeting based on time of day (morning, afternoon, evening)
-- [x] Day and night themes with different background images
-- [x] Random inspirational quotes with refresh functionality
+- [x] Procedural sky background that interpolates a 24-hour colour gradient — night, dawn, day, dusk — with stars fading in after dark
+- [x] Split-flap clock digits that spring-flip on every change
+- [x] Ticking clock that pauses while the tab is hidden and resyncs on return
+- [x] Time-of-day greeting with a per-letter masked reveal and sun/moon swap
 - [x] IP-based geolocation displaying city and country
-- [x] Expandable information panel with timezone, day of year, day of week, and week number
-- [x] Responsive design for desktop, tablet, and mobile
+- [x] Random inspirational quotes with refresh
+- [x] Expandable stats panel — timezone, day of year, day of week and week number, with counters that animate up
+- [x] Cursor-follow glow and magnetic hover on the toggle button
+- [x] `prefers-reduced-motion` respected across the flip clock and stats panel
+- [x] Boot loader, film-grain overlay and self-hosted Google Fonts via `next/font`
 - [x] Toast notifications for loading states and errors
 - [x] Next.js 13 App Router with API routes
+- [x] Responsive design for desktop, tablet, and mobile
 - [x] Deployed on Vercel
 
 ## Tech Stack
 
 - [Next.js 13](https://nextjs.org/)
+- [React 18](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [React](https://react.dev/)
-- [date-fns](https://date-fns.org/)
+- [Framer Motion](https://motion.dev/)
 - [React Hot Toast](https://react-hot-toast.com/)
-- [Normalize.css](https://necolas.github.io/normalize.css/)
+- [CSS Modules](https://github.com/css-modules/css-modules)
 - [Vercel](https://vercel.com/)
 
 ## Getting Started
@@ -106,35 +112,51 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 npm run build
 ```
 
+| Command         | Action                                      |
+| :-------------- | :------------------------------------------ |
+| `npm install`   | Installs dependencies                       |
+| `npm run dev`   | Starts local dev server at `localhost:3000` |
+| `npm run build` | Builds the production app                   |
+| `npm start`     | Serves the production build                 |
+| `npm run lint`  | Lints the project with ESLint               |
+
+## Environment Variables
+
+This project does not require any environment variables for basic usage.
+
 ## Project Structure
 
 ```
 /
 ├── app/
 │   ├── api/
-│   │   ├── route.ts
 │   │   ├── data/
 │   │   │   └── route.ts
-│   │   └── quote/
-│   │       ├── route.ts
-│   │       └── quotes-data.ts
+│   │   ├── quote/
+│   │   │   ├── quotes-data.ts
+│   │   │   └── route.ts
+│   │   └── route.ts
 │   ├── components/
+│   │   ├── CursorGlow.tsx
+│   │   ├── FlipClock.tsx
 │   │   ├── IconArrowDown.tsx
-│   │   ├── IconArrowUp.tsx
 │   │   ├── IconMoon.tsx
 │   │   ├── IconRefresh.tsx
 │   │   ├── IconSun.tsx
-│   │   └── Loader.tsx
+│   │   ├── Loader.tsx
+│   │   ├── MagneticButton.tsx
+│   │   ├── Quote.tsx
+│   │   ├── SkyBackground.tsx
+│   │   └── StatsPanel.tsx
+│   ├── hooks/
+│   │   └── useNow.ts
 │   ├── globals.css
 │   ├── layout.tsx
 │   ├── page.module.css
 │   └── page.tsx
 ├── public/
 │   ├── assets/
-│   │   ├── desktop/
-│   │   ├── mobile/
-│   │   └── tablet/
-│   └── screenshot.png
+│   └── favicon-32x32.ico
 ├── next.config.js
 ├── package.json
 └── tsconfig.json
@@ -171,26 +193,29 @@ This project is not currently licensed.
 ---
 
 <!-- Badges -->
+
 [nextjs]: https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js
 [typescript]: https://img.shields.io/badge/Typescript-007ACC?style=for-the-badge&logo=typescript&logoColor=white&color=blue
 [react]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[date-fns]: https://img.shields.io/badge/Date--fns-F7841B?style=for-the-badge&logo=date-fns&logoColor=white
+[framer-motion]: https://img.shields.io/badge/Framer%20Motion-2A2A2A?style=for-the-badge&logo=npm&logoColor=white
 [react-hot-toast]: https://img.shields.io/badge/React--Hot--Toast-2A2A2A?style=for-the-badge&logo=npm&logoColor=white
 [vercel]: https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white
 
 <!-- Badge links -->
+
 [nextjs-link]: https://nextjs.org/
 [typescript-link]: https://www.typescriptlang.org/
 [react-link]: https://react.dev/
-[date-fns-link]: https://date-fns.org/
+[framer-motion-link]: https://motion.dev/
 [react-hot-toast-link]: https://react-hot-toast.com/
 [vercel-link]: https://vercel.com/
 
-<!-- Status badges -->
-[demo]: https://img.shields.io/badge/🚀%20Live%20Demo-Click%20Here-blue?style=for-the-badge
+<!-- Status/Demo badges -->
+
+[demo]: https://img.shields.io/badge/🚀%20Live%20Demo-000000?style=for-the-badge&&logoColor=white&color=0a6bdb
+[status-link]: https://github.com/wrujel/monitor-repos
+[tests-link]: https://github.com/wrujel/monitor-tests
 [demo-link]: https://clock-app-wrujel.vercel.app/
 [status]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwrujel%2Fmonitor-repos%2Fmain%2Fdata%2Fclock-app.json
-[status-link]: https://github.com/wrujel/monitor-repos
 [deploy]: https://img.shields.io/github/deployments/wrujel/clock-app/production?style=for-the-badge&label=Deploy
 [tests]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwrujel%2Fmonitor-tests%2Fmain%2Fdata%2Fclock-app.json
-[tests-link]: https://github.com/wrujel/monitor-tests
