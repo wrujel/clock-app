@@ -18,7 +18,7 @@
 </div>
 
 <div align='center'>
-  <h1>Clock App with Next.js</h1>
+  <h1>Circadia - Clock app</h1>
 </div>
 
 <div align='center'>
