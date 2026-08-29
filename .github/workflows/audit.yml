@@ -23,14 +23,14 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Reads the pinned version from package.json "packageManager".
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
 
       # lockfile-only: no install. `|| true` is load-bearing - pnpm audit
       # exits non-zero when vulns exist, which is the normal case being
@@ -74,3 +74,4 @@ jobs:
             if (out) console.log("::notice title=audit::MONITOR_AUDIT " + JSON.stringify(out));
             else console.log("::warning::no readable audit report - emitting no sentinel");
           '
+
