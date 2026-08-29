@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "next", "next/image-types/global"],
     "plugins": [
       {
         "name": "next"
@@ -33,3 +33,4 @@
   ],
   "exclude": ["node_modules"]
 }
+
