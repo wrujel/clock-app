@@ -1,18 +1,20 @@
-# pnpm settings for this (single-package) repo. pnpm 11 reads its configuration
-# from here rather than .npmrc; there is no `packages:` key, so this does not
-# declare a workspace.
+# pnpm settings for this repo. pnpm 11 reads its configuration from here
+# rather than .npmrc, and no longer reads the "pnpm" field in package.json.
 
-# Postinstall scripts are gated by default since pnpm 10. unrs-resolver builds
-# the native binding eslint-import-resolver-typescript needs, so `pnpm lint`
-# fails without it.
+# This is NOT a monorepo. The `packages` key is here because pnpm 9 treats any
+# pnpm-workspace.yaml as a workspace declaration and aborts with "packages
+# field missing or empty" - which is what broke the Vercel deploy, since
+# Vercel infers pnpm 9 from lockfileVersion 9.0. pnpm 10+ would accept a
+# settings-only file; pnpm 9 will not. Do not remove.
+packages:
+  - '.'
+
+# Postinstall scripts are gated by default since pnpm 10, and pnpm 11 fails
+# the whole install on an unapproved one. unrs-resolver builds the native
+# binding eslint-import-resolver-typescript needs.
 allowBuilds:
   unrs-resolver: true
 
 # Cleared through the local minimum-release-age supply-chain gate.
 minimumReleaseAgeExclude:
   - '@vitejs/plugin-react@6.1.1'
-
-# eslint-config-next's plugin stack still declares eslint ^9 peers; the tree is
-# verified to work, so warn rather than fail the install.
-strictPeerDependencies: false
-autoInstallPeers: true
