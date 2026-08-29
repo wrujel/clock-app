@@ -33,3 +33,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# testing
+/coverage
+.vitest.json
+
+# dependency audit report (written by .github/workflows/audit.yml)
+audit.json
