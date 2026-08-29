@@ -1,0 +1,83 @@
+# Unit tests + coverage, reported back to the Content Studio.
+#
+# The studio's scheduler dispatches this daily and then READS this run: its
+# conclusion becomes the project's "unit tests" tag, and the MONITOR_COVERAGE
+# line below becomes its "coverage %" tag and the shields endpoint the studio
+# publishes. Nothing is committed here, no secret is needed, and the README is
+# maintained by the studio - do not add badges to it by hand.
+name: CI
+
+on:
+  workflow_dispatch: # the studio's daily coverage sweep dispatches this
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A newer run supersedes an in-flight one on the same ref - a daily dispatch
+# landing on top of a push must not queue behind it.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Reads the pinned version from package.json "packageManager".
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Runs first so a lint or build failure can never blank a real coverage
+      # number. Reporters come from vitest.config.mts; --reporter=json adds the
+      # test counts the studio shows next to the conclusion.
+      - name: Run tests with coverage
+        run: >-
+          pnpm exec vitest run --coverage
+          --reporter=default
+          --reporter=json
+          --outputFile.json=.vitest.json
+
+      # `always()`: a failing suite still measured something, and the studio
+      # shows the red tag NEXT TO a real percentage.
+      - name: Report to the studio
+        if: always()
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            node -e '
+              const t = require("./coverage/coverage-summary.json").total.lines;
+              const out = { pct: t.pct, lines: { covered: t.covered, total: t.total } };
+              try {
+                const r = require("./.vitest.json");
+                out.tests = {
+                  passed: r.numPassedTests,
+                  failed: r.numFailedTests,
+                  skipped: r.numPendingTests,
+                };
+              } catch {}
+              console.log("::notice title=coverage::MONITOR_COVERAGE " + JSON.stringify(out));
+            '
+          else
+            echo "::notice title=coverage::MONITOR_COVERAGE {\"pct\":null}"
+          fi
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Build
+        run: pnpm run build
