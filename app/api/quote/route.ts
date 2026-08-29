@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { quotes } from "./quotes-data";
+import { NextResponse } from "next/server";
+import { generateQuote } from "./generate-quote";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const quote = generateQuote();
   const body = { content: quote.quote, author: quote.author };
   const status = 200;
@@ -10,8 +10,3 @@ export async function GET(request: NextRequest) {
   };
   return NextResponse.json(body, { status, headers });
 }
-
-export const generateQuote = () => {
-  const randomIndex = Math.floor(Math.random() * quotes.length);
-  return quotes[randomIndex];
-};

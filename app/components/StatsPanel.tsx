@@ -1,6 +1,11 @@
 "use client";
 
-import { AnimatePresence, animate, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  animate,
+  motion,
+  useReducedMotion,
+} from "framer-motion";
 import { useEffect, useState } from "react";
 import styles from "./StatsPanel.module.css";
 
@@ -12,13 +17,10 @@ interface Stat {
 
 function CountUp({ value }: { value: number }) {
   const reduce = useReducedMotion();
-  const [display, setDisplay] = useState(reduce ? value : 0);
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    if (reduce) {
-      setDisplay(value);
-      return;
-    }
+    if (reduce) return;
     const controls = animate(0, value, {
       duration: 1.2,
       ease: [0.22, 1, 0.36, 1],
@@ -27,7 +29,8 @@ function CountUp({ value }: { value: number }) {
     return () => controls.stop();
   }, [value, reduce]);
 
-  return <>{display}</>;
+  // Reduced motion jumps straight to the final value — no animation, no state.
+  return <>{reduce ? value : display}</>;
 }
 
 interface Props {
@@ -46,7 +49,12 @@ export default function StatsPanel({ open, isNight, stats }: Props) {
           initial={{ y: "103%" }}
           animate={{ y: 0 }}
           exit={{ y: "103%" }}
-          transition={{ type: "spring", stiffness: 120, damping: 20, mass: 0.9 }}
+          transition={{
+            type: "spring",
+            stiffness: 120,
+            damping: 20,
+            mass: 0.9,
+          }}
         >
           <div className={styles.grid}>
             {stats.map((s, i) => (

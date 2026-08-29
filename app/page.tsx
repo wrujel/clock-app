@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import CursorGlow from "./components/CursorGlow";
 import FlipClock from "./components/FlipClock";
@@ -13,11 +13,19 @@ import MagneticButton from "./components/MagneticButton";
 import Quote from "./components/Quote";
 import SkyBackground from "./components/SkyBackground";
 import StatsPanel from "./components/StatsPanel";
+import { useMounted } from "./hooks/useMounted";
 import { useNow } from "./hooks/useNow";
 import styles from "./page.module.css";
 
 const serverUrl = "/api";
 const apiUrl = "https://api.ipify.org/?format=json";
+
+async function getIp(): Promise<string | undefined> {
+  const res = await fetch(apiUrl);
+  const data = await res.json();
+  if (!data) return undefined;
+  return data.ip;
+}
 
 const container: Variants = {
   hidden: {},
@@ -45,19 +53,10 @@ export default function Home() {
   const [info, setInfo] = useState(false);
   const [city, setCity] = useState<string>();
   const [country, setCountry] = useState<string>();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const now = useNow();
 
-  useEffect(() => {
-    setMounted(true);
-    toast.promise(getServerData(), {
-      loading: "Tuning the sky…",
-      success: "Sky synced",
-      error: "Error loading client",
-    });
-  }, []);
-
-  async function getServerData() {
+  const getServerData = useCallback(async () => {
     const ip = await getIp();
     if (!ip) {
       toast.error("Disable adblocker to load client");
@@ -87,7 +86,7 @@ export default function Home() {
           1000 /
           60 /
           60 /
-          24
+          24,
       );
       const weekNumber = Math.floor(dayOfYear / 7);
       setDayofWeek(today.toLocaleDateString("en-US", { weekday: "long" }));
@@ -97,27 +96,32 @@ export default function Home() {
       setCountry(data.country_name);
       setText(data.content);
       setAutor(data.author);
-    } catch (error) {
+    } catch {
       toast.error("Error fetching data");
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
-  async function getQuote() {
+  useEffect(() => {
+    // Fetch-on-mount. Every setState in getServerData runs after an await, so
+    // none of them are synchronous with this effect; the rule can't see across
+    // the async boundary and flags the call itself.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    toast.promise(getServerData(), {
+      loading: "Tuning the sky…",
+      success: "Sky synced",
+      error: "Error loading client",
+    });
+  }, [getServerData]);
+
+  const getQuote = useCallback(async () => {
     const res = await fetch(`${serverUrl}/quote`);
     const data = await res.json();
     if (!data) return;
     setText(data.content);
     setAutor(data.author);
-  }
-
-  async function getIp() {
-    const res = await fetch(`${apiUrl}`);
-    const data = await res.json();
-    if (!data) return;
-    return data.ip;
-  }
+  }, []);
 
   const handleRefresh = () => {
     toast.promise(getQuote(), {
@@ -132,10 +136,10 @@ export default function Home() {
     hour < 5
       ? "GOOD EVENING"
       : hour < 12
-      ? "GOOD MORNING"
-      : hour < 18
-      ? "GOOD AFTERNOON"
-      : "GOOD EVENING";
+        ? "GOOD MORNING"
+        : hour < 18
+          ? "GOOD AFTERNOON"
+          : "GOOD EVENING";
   const isNight = hour < 5 || hour >= 18;
   const statsReady = Boolean(timezone && dayofWeek && dayofYear && week);
 
@@ -269,15 +273,15 @@ export default function Home() {
         </motion.div>
       )}
 
-      {statsReady && (
+      {timezone && dayofWeek && dayofYear && week && (
         <StatsPanel
           open={info}
           isNight={isNight}
           stats={[
-            { label: "Current timezone", value: timezone ?? "", numeric: false },
-            { label: "Day of the year", value: dayofYear ?? "", numeric: true },
-            { label: "Day of the week", value: dayofWeek ?? "", numeric: false },
-            { label: "Week number", value: week ?? "", numeric: true },
+            { label: "Current timezone", value: timezone, numeric: false },
+            { label: "Day of the year", value: dayofYear, numeric: true },
+            { label: "Day of the week", value: dayofWeek, numeric: false },
+            { label: "Week number", value: week, numeric: true },
           ]}
         />
       )}
