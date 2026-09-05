@@ -11,7 +11,7 @@
   <a href='/'>
     <img
       src='screenshot.webp'
-      alt='Screenshot of the app'
+      alt='Circadia clock app showing a procedural daytime sky with a glowing sun, a Good morning greeting, the time 09:40 and a rotating quote.'
       width='100%'
     />
   </a>
@@ -33,7 +33,7 @@
 </div>
 
 <div align='center'>
-  Circadia — a living clock built with Next.js 13 and TypeScript. A procedural sky repaints itself across the 24-hour cycle, split-flap digits tick out the local time, and an expandable panel adds timezone, day-of-year and week details alongside IP-based location and a rotating quote.
+  Circadia — a living clock built with Next.js 13 and TypeScript. A procedural sky interpolates a 24-hour colour gradient through night, dawn, day and dusk with stars fading in after dark, split-flap digits spring-flip on every change, and a time-of-day greeting reveals letter by letter. An expandable panel adds timezone, day of year, day of week and week number with counters that animate up, alongside IP-based city detection and a refreshable quote.
 
 [Demo][demo-link] · [Report issue](/issues) · [Suggest something](/issues)
 
